@@ -1,0 +1,23 @@
+# NetBeans specific items#
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Class Files #
+*.class
+
+# Package Files #
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+/.idea/
+/edgeconverter801g4.iml
+
+.DS_Store

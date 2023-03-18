@@ -1,0 +1,53 @@
+image: openjdk:11
+
+before_script:
+  - echo "Operating system and tools info:"
+  - cat /etc/*-release    # OS name
+  - uname -r              # OS kernel version
+  - java -version         # Java version
+  - which java            # /usr/local/openjdk-11/bin/java
+  - echo $JAVA_HOME
+  - apt update
+  - apt -y install ant
+  - ant -version
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+#  - test
+  - package
+#  - deploy
+
+
+build:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - ant compile -Dlog4j.configurationFile=log4j2.xml
+  artifacts:
+    paths:
+      - ./src
+      - ./build
+      - ./lib
+
+#sonar-test:
+#  stage: test
+#  script:
+#    - echo "Inspecting the code for quality ... "
+#    - ant sonar
+    #The sonar.qualitygate.wait step will pause the pipeline until SonarQube analysis is completed and returns Quality Gate status.
+    #- ant sonar -Dsonar.qualitygate.wait=true  # fails if analysis fails
+
+package-jar:        # This job also runs in the run stage.
+  stage: package
+  script:
+    - echo "Executing code..."
+    - ant jar
+  artifacts:
+    paths:
+      - ./dist
+
+#deploy-info:      # This job runs in the deploy stage.
+#  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+#  script:
+#    - echo "Deploying application to production ..."
+
